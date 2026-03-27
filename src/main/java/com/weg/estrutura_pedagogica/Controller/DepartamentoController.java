@@ -3,6 +3,9 @@ package com.weg.estrutura_pedagogica.Controller;
 import com.weg.estrutura_pedagogica.Dto.DepartamentoRequisicaoDto;
 import com.weg.estrutura_pedagogica.Dto.DepartamentoRespostaDto;
 import com.weg.estrutura_pedagogica.Service.DepartamentoService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,22 +21,27 @@ public class DepartamentoController {
     }
 
     @PostMapping
-    public DepartamentoRespostaDto salvar(@RequestBody DepartamentoRequisicaoDto dto) {
-        return service.salvar(dto);
+    public ResponseEntity<DepartamentoRespostaDto> salvar(
+            @RequestBody DepartamentoRequisicaoDto dto) {
+
+        DepartamentoRespostaDto resposta = service.salvar(dto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
     @GetMapping
-    public List<DepartamentoRespostaDto> listar() {
-        return service.listar();
+    public ResponseEntity<List<DepartamentoRespostaDto>> listar() {
+        return ResponseEntity.ok(service.listar());
     }
 
     @GetMapping("/{id}")
-    public DepartamentoRespostaDto buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public ResponseEntity<DepartamentoRespostaDto> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
